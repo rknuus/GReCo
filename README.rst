@@ -2,7 +2,7 @@
 rexex
 =====
 
-Rule EXample EXtractor is a proof of concept processesing a 
+Rule EXample EXtractor is a proof of concept processing a 
 `C++ Core Guideline <https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md>`_ 
 Markdown file and extracting the code examples of each rule. rexex tries to
 figure out which code examples should pass tests of the rule in question and
@@ -20,6 +20,19 @@ Setup
 =====
 ::
 
+    # install Python 3
+    # E.g. on Mac OS X
+    brew install python3
+    # Or on Debian/Ubuntu
+    sudo apt install python3
+
+    # install pandoc
+    # E.g. on Mac OS X
+    brew install pandoc
+    # Or on Debian/Ubuntu
+    sudo apt install pandoc
+
+    # install python library dependencies
     pip install -r requirements.txt
 
 
