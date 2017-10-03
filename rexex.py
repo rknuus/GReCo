@@ -73,6 +73,9 @@ def get_example_class(codeblock_text, example_header):
 
 
 def run(args):
+    if not args or len(args) < 1:
+        print('Usage: rexex.py <path of CppCoreGuidelines.md>', file=sys.stderr)
+        return -1
     data = pypandoc.convert_file(args[0], to='json')
     doc = panflute.load(io.StringIO(data))
     doc.headers = []
