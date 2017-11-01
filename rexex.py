@@ -13,7 +13,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import collections
 import io
+import json
 import pypandoc
 import panflute
 import re
@@ -52,13 +54,11 @@ good_comment = re.compile('//\s*(?:good|ok|do[^n]|better)', re.I)
 bad_comment = re.compile('//\s*(?:bad|don\'t)', re.I)
 
 
-def get_example_class(codeblock_text, example_header):
+def classify_example(codeblock_text, example_header):
     g1 = good_comment.search(codeblock_text)
     b1 = bad_comment.search(codeblock_text)
     g2 = good_header.search(example_header) if example_header else None
     b2 = bad_header.search(example_header) if example_header else None
-    if g2 or b2:  # TEMPORARILY(KNR)
-        print('(decision based on example title: {})'.format(example_header))
 
     good = g1 or g2
     bad = b1 or b2
@@ -69,18 +69,22 @@ def get_example_class(codeblock_text, example_header):
         return 'good'
     elif bad:
         return 'bad'
-    return 'possibly good or bad'
+    return 'undefined'
 
 
 def run(args):
-    if not args or len(args) < 1:
-        print('Usage: rexex.py <path of CppCoreGuidelines.md>', file=sys.stderr)
+    if not args or len(args) < 2:
+        print('Usage: rexex.py <path of CppCoreGuidelines.md> <output file>', file=sys.stderr)
         return -1
-    data = pypandoc.convert_file(args[0], to='json')
+
+    input_file = args[0]
+    output_file = args[1]
+    data = pypandoc.convert_file(input_file, to='json')
     doc = panflute.load(io.StringIO(data))
     doc.headers = []
     doc.codeblocks = []
     doc = panflute.run_filter(action, doc=doc)
+    rules = collections.defaultdict(lambda: collections.defaultdict(list))
 
     for codeblock in doc.codeblocks:
         possible_header = codeblock
@@ -96,10 +100,11 @@ def run(args):
             header_match = match_rule_id(possible_header)
         if not header_match:
             continue
-        example_class = get_example_class(codeblock.text, str(example_match))
-        print('{} example code for rule {}:'.format(example_class, header_match))
-        print(codeblock.text)
-        print('// ************************************************************\n')
+        example_class = classify_example(codeblock.text, str(example_match))
+        rules[header_match][example_class].append(codeblock.text)
+
+    with open(output_file, 'w') as output:
+        output.write(json.dumps(rules))
 
 
 def main():

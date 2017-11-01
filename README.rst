@@ -42,22 +42,11 @@ Usage
 To extract code examples:
 ::
 
-    ./rexex.py ~/somewhere/CppCoreGuidelines.md
+    ./rexex.py ~/somewhere/CppCoreGuidelines.md ~/somewhere/examples.json
 
 
-The tool prints something like:
-::
-
-    mixed example code for rule P.1:
-    class Date {
-        // ...
-    public:
-        Month month() const;  // do
-        int month();          // don't
-        // ...
-    };
-    // ************************************************************
-
+The tool creates a JSON file containing a mapping of rules to examples grouped
+by classification.
 
 License
 =======
