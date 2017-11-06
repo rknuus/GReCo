@@ -1,2 +1,4 @@
-pypandoc
+nltk
 panflute
+pypandoc
+spacy
