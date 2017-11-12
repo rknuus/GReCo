@@ -1,19 +1,25 @@
 =====
-rexex
+GReCo
 =====
 
-Rule EXample EXtractor is a proof of concept processing a 
-`C++ Core Guideline <https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md>`_ 
-Markdown file and extracting the code examples of each rule. rexex tries to
-figure out which code examples should pass tests of the rule in question and
-which ones should be reported.
+Guideline RulE COverage will be a set of tools to identify guideline rules
+covered by which checker (e.g. a compiler or a static code analysis tool).
 
-Currently rexex prints the examples, the rule they belong to, and a
-classification.
 
-Later on the output can be fed to static code analyzers like ``clang-tidy``,
-``cpplint.py``, or Visual Studio to understand the coverage of the rules by the
-static code analyzer.
+rexex
+=====
+Rule EXample EXtractor extracts the code examples of each
+`C++ Core Guideline <https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md>` rule and tries to classify the example whether it's a
+good one, a bad one, a mixed one, or unclassifiable.
+
+To extract code examples:
+::
+
+    ./rexex.py ~/somewhere/CppCoreGuidelines.md ~/somewhere/examples.json
+
+
+The tool creates a JSON file containing a mapping of rules to examples grouped
+by classification.
 
 
 Setup
@@ -35,18 +41,6 @@ Setup
     # install python library dependencies
     pip install -r requirements.txt
 
-
-Usage
-=====
-
-To extract code examples:
-::
-
-    ./rexex.py ~/somewhere/CppCoreGuidelines.md ~/somewhere/examples.json
-
-
-The tool creates a JSON file containing a mapping of rules to examples grouped
-by classification.
 
 License
 =======
